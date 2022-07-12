@@ -1,0 +1,94 @@
+C. Имена и фамилии
+
+На вход подается две строки, в каждой из них перечислены имена и фамилии студентов. Однако не гарантируется, что первым всегда написано имя, а затем фамилия. Нужно определить, являются ли два набора студентов одинаковыми или нет.
+
+Формат ввода
+На вход подается две строки. Все пары имя+фамилия перечислены строго через запятую. В конце каждой строки стоит точка.
+
+Формат вывода
+Нужно вывести YES, если наборы студентов являются одинаковыми, иначе NO.
+
+Пример 1
+Input:
+Иван Петров, Иванов Петр.
+Петр Иванов, Иван Петров.
+
+Output:
+YES
+
+Пример 2
+Input:
+Иван Петров, Иванов Петр.
+Иван Петров, Максим Сидоров.
+
+Output:
+NO
+
+Примечания
+Гарантируется, что пары имя+фамилия в каждой строке не могут повторяться. Имя не может быть таким же как фамилия.
+
+C++:
+
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+vector <string> split(string s, string del = " ")
+{
+    vector <string> res;
+    int start = 0;
+    int end = s.find(del);
+    while (end != -1) {
+        res.push_back(s.substr(start, end - start));
+        start = end + del.size();
+        end = s.find(del, start);
+    }
+    res.push_back(s.substr(start, end - start));
+    return res;
+}
+
+int main(int argc, const char * argv[]) {
+    string first, last;
+    
+    getline(cin, first);
+    getline(cin, last);
+    
+    vector <string> first_vec, last_vec;
+    first_vec = split(first, " ");
+    last_vec = split(last, " ");
+    
+    for (int i = 1; i < first_vec.size(); i += 2) {
+        first_vec[i].pop_back();
+        last_vec[i].pop_back();
+    }
+
+    
+    
+    bool* check = new bool[first_vec.size()];
+    for (int i = 0; i < first_vec.size(); i++) {
+        check[i] = false;
+    }
+    
+    for (int i = 0; i < first_vec.size(); i++) {
+        for (int j = 0; j < last_vec.size(); j++) {
+            if ((first_vec[i] == last_vec[j]) && !check[j]) {
+                check[j] = true;
+                break;
+            }
+        }
+    }
+    
+    for (int i = 0; i < first_vec.size(); i++) {
+        if (!check[i]) {
+            cout << "NO" << endl;
+            return 0;
+        }
+    }
+    
+    cout << "YES" << endl;
+    
+    
+    return 0;
+}
+

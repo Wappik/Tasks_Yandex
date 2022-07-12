@@ -1,0 +1,103 @@
+B. Перелет
+
+Иван Иванов летит из страны А в страну Б, и хочет скачать фильмы в дорогу. Он знает время прибытия, время отправления и разницу в часовых поясах. Помогите Ивану определить, сколько времени он проведет в самолете.
+
+Формат ввода
+На вход подается 3 строки: Время отправления (от 0:00, до 23:59) Время прибытия (от 0:00 до 23:59) Разница в часовых поясах (от -12 до +14)
+
+Формат вывода
+Нужно вывести время в полете: "<количество_часов>:<количество_минут>" (минимальное неотрицательное).
+
+Пример 1
+Input:  
+12:00
+13:05
+0
+
+Output: 
+1:05
+
+Пример 2
+Input:  
+12:00
+13:00
+0
+
+Output: 
+1:00
+
+Пример 3
+Input:  
+0:00
+6:25
+0
+
+Output: 
+6:25
+
+Пример 4
+Input:  
+1:00
+12:50
+0
+
+Output: 
+11:50
+
+
+Примечания
+Гарантируется, что подаются корректные данные.
+
+C++:
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Time {
+    int hour, minutes;
+};
+
+void printTime (Time a) {
+    cout << a.hour << ":";
+    if (a.minutes < 10) {
+        cout << "0" << a.minutes << endl;
+    }
+    else {
+        cout << a.minutes << endl;
+    }
+}
+
+int main(int argc, const char * argv[]) {
+    Time a, b;
+    int differenceTime;
+    string time;
+    getline(cin, time);
+    
+    if (time.size() < 5) {
+        a.hour = (int(time[0]) - 48);
+        a.minutes = (int(time[2]) - 48) * 10 + (int(time[3]) - 48);
+    }
+    else {
+        a.hour = (int(time[0]) - 48) * 10 + (int(time[1]) - 48);
+        a.minutes = (int(time[3]) - 48) * 10 + (int(time[4]) - 48);
+    }
+    getline(cin, time);
+    if (time.size() < 5) {
+        b.hour = (int(time[0]) - 48);
+        b.minutes = (int(time[2]) - 48) * 10 + (int(time[3]) - 48);
+    }
+    else {
+        b.hour = (int(time[0]) - 48) * 10 + (int(time[1]) - 48);
+        b.minutes = (int(time[3]) - 48) * 10 + (int(time[4]) - 48);
+    }
+    cin >> differenceTime;
+    int time_A = (a.hour * 60) + a.minutes + (differenceTime * 60);
+    int time_B = (b.hour * 60) + b.minutes;
+    int time_end = (time_A > time_B) ? (((1440 - time_A + time_B) < 0) ? 2880 - time_A + time_B : 1440 - time_A + time_B)  : time_B - time_A;
+    Time end;
+    end.hour = time_end / 60;
+    end.minutes = time_end % 60;
+    printTime(end);
+    return 0;
+}
